@@ -1,7 +1,8 @@
 # Project Umami
-VSTU 2021
-Гумеров Марат, ПрИн-267
-Creating a database for animated series compendium
+VSTU 2021 <p>
+Гумеров Марат, ПрИн-267 <p>
+Creating a database for animated series compendium <p> --- <p>
+
 
 Database's ER diagram:
 ![image](https://user-images.githubusercontent.com/80543943/110986187-66475180-837e-11eb-9ff9-a3fcecb317bd.png)
