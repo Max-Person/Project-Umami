@@ -1,4 +1,6 @@
 # Project Umami
+VSTU 2021
+Гумеров Марат, ПрИн-267
 Creating a database for animated series compendium
 
 Database's ER diagram:
