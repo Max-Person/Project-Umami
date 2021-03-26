@@ -9,3 +9,6 @@ Database's ER diagram:
 
 Database's relational schema:
 ![image](https://user-images.githubusercontent.com/80543943/110986289-89720100-837e-11eb-9d9a-c73a7e191a18.png)
+
+MySQL-generated relational schema:
+![image](https://user-images.githubusercontent.com/80543943/112669019-3d3fba00-8e70-11eb-9503-0d2d5aeeeb71.png)
