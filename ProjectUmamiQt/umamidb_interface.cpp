@@ -19,12 +19,13 @@ QVector<TitleBrowserElement> UmamiDB_interface::getTitleBrowser()
     query.exec(
     "select titles.idTitles, titles.Name, group_concat(genres.Name) as Genres, title_types.Name as Type, release_statuses.Name as Status \
     from titles \
-        natural join genres_to_titles \
-        join genres  \
+        left join genres_to_titles \
+            on titles.idTitles=genres_to_titles.idTitles \
+        left join genres  \
             on genres_to_titles.idGenres=genres.idGenres \
-        join title_types \
+        left join title_types \
             on titles.TypeID = title_types.idTitleTypes \
-        join release_Statuses \
+        left join release_Statuses \
             on titles.StatusID = release_Statuses.idReleaseStatuses \
     group by titles.idTitles \
     order by titles.Name asc;");
@@ -40,6 +41,8 @@ QVector<TitleBrowserElement> UmamiDB_interface::getTitleBrowser()
         browser.append(currentElement);
     }
 
+    qDebug() << browser.size();
+
     return browser;
 }
 
@@ -49,12 +52,13 @@ QVector<TitleBrowserElement> UmamiDB_interface::getTitleBrowserByName(QString na
     query.exec(
     "select titles.idTitles, titles.Name, group_concat(genres.Name) as Genres, title_types.Name as Type, release_statuses.Name as Status \
     from titles \
-        natural join genres_to_titles \
-        join genres  \
+        left join genres_to_titles \
+            on titles.idTitles=genres_to_titles.idTitles \
+        left join genres  \
             on genres_to_titles.idGenres=genres.idGenres \
-        join title_types \
+        left join title_types \
             on titles.TypeID = title_types.idTitleTypes \
-        join release_Statuses \
+        left join release_Statuses \
             on titles.StatusID = release_Statuses.idReleaseStatuses \
     where titles.Name like \"%" + name + "%\" \
     group by titles.idTitles \
@@ -79,9 +83,9 @@ QVector<FranchiseBrowserElement> UmamiDB_interface::getFranchiseBrowser()
 {
     QSqlQuery query(umamiDB);
     query.exec(
-    "select franchises.idfranchises, franchises.Name, group_concat(distinct quote(titles.Name)) as Titles \
+    "select franchises.idfranchises, franchises.Name, group_concat(distinct titles.Name) as Titles \
     from franchises \
-        join titles \
+        left join titles \
             on franchises.idfranchises=titles.FranchiseID \
     group by franchises.idfranchises \
     order by franchises.Name asc;");
@@ -103,9 +107,9 @@ QVector<FranchiseBrowserElement> UmamiDB_interface::getFranchiseBrowserByName(QS
 {
     QSqlQuery query(umamiDB);
     query.exec(
-    "select franchises.idfranchises, franchises.Name, group_concat(distinct quote(titles.Name)) as Titles \
+    "select franchises.idfranchises, franchises.Name, group_concat(distinct titles.Name) as Titles \
     from franchises \
-        join titles \
+        left join titles \
             on franchises.idfranchises=titles.FranchiseID \
     where franchises.Name like \"%" + name + "%\" \
     group by franchises.idfranchises \
