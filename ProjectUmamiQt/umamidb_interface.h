@@ -3,11 +3,26 @@
 
 #include <QVector>
 #include <QVariant>
+#include <QDate>
 #include <QtSql/QSql>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
+#include <QDebug>
 
+struct TitleItem
+{
+    int id;
+    QString name;
+    QString description;
+    QDate releaseDate;
+    QDate endingDate;
+    QString genres;
+    QString type;
+    QString status;
+    QString franchise;
+    QString studio;
+};
 
 struct TitleBrowserElement
 {
@@ -38,6 +53,8 @@ public:
     QVector<TitleBrowserElement> getTitleBrowser();
     QVector<TitleBrowserElement> getTitleBrowserByName(QString name);
     QVector<TitleBrowserElement> getTitleBrowserByFranchise(QString franchise);
+
+    TitleItem getTitleById(int id);
 
     QVector<FranchiseBrowserElement> getFranchiseBrowser();
     QVector<FranchiseBrowserElement> getFranchiseBrowserByName(QString name);

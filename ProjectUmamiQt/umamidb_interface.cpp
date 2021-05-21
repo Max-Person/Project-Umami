@@ -79,6 +79,45 @@ QVector<TitleBrowserElement> UmamiDB_interface::getTitleBrowserByName(QString na
 
 }
 
+TitleItem UmamiDB_interface::getTitleById(int id)
+{
+    QSqlQuery query(umamiDB);
+    query.exec(
+    "select titles.idTitles, titles.Name, titles.DateOfRelease, titles.EndingDate, titles.Description, \
+        group_concat(genres.Name) as Genres, franchises.Name as Franchise, studios.Name as Studio, title_types.Name as Type, release_statuses.Name as Status \
+    from titles \
+        left join genres_to_titles \
+            on titles.idTitles=genres_to_titles.idTitles \
+        left join genres  \
+            on genres_to_titles.idGenres=genres.idGenres \
+        left join franchises \
+            on titles.FranchiseID = franchises.idfranchises \
+        left join studios \
+            on titles.StudioID = studios.idStudios \
+        left join title_types \
+            on titles.TypeID = title_types.idTitleTypes \
+        left join release_Statuses \
+            on titles.StatusID = release_Statuses.idReleaseStatuses \
+    where titles.idTitles = " + QString::number(id) + " \
+    group by titles.idTitles;");
+
+    query.next();
+
+    TitleItem returned;
+    returned.id = query.value("idTitles").toInt();
+    returned.name = query.value("Name").toString();
+    returned.description = query.value("Description").toString();
+    returned.releaseDate = query.value("DateOfRelease").toDate();
+    returned.endingDate = query.value("EndingDate").toDate();
+    returned.genres = query.value("Genres").toString();
+    returned.type = query.value("Type").toString();
+    returned.status = query.value("Status").toString();
+    returned.franchise = query.value("Franchise").toString();
+    returned.studio = query.value("Studio").toString();
+
+    return returned;
+}
+
 QVector<FranchiseBrowserElement> UmamiDB_interface::getFranchiseBrowser()
 {
     QSqlQuery query(umamiDB);
