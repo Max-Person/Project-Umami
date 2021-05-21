@@ -22,6 +22,8 @@ private slots:
 
     void on_franchiseSearchLine_returnPressed();
 
+    void on_titlesTable_cellClicked(int row, int column);
+
 private:
     Ui::MainWindow *ui;
 

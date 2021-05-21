@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1021</width>
-    <height>582</height>
+    <width>932</width>
+    <height>567</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,6 +58,9 @@
            <widget class="QTableWidget" name="titlesTable">
             <property name="sizeAdjustPolicy">
              <enum>QAbstractScrollArea::AdjustToContents</enum>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
             </property>
             <column>
              <property name="text">
@@ -199,14 +202,18 @@
             <item>
              <widget class="QTextEdit" name="titleDescText"/>
             </item>
+            <item>
+             <layout class="QHBoxLayout" name="TitleEditButtonsLayout">
+              <item>
+               <widget class="QPushButton" name="pushButton">
+                <property name="text">
+                 <string>Изменить данные о тайтле</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton">
-            <property name="text">
-             <string>Изменить данные о тайтле</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </item>
@@ -248,6 +255,9 @@
           </item>
           <item>
            <widget class="QTableWidget" name="franchisesTable">
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
             <column>
              <property name="text">
               <string>Название</string>
@@ -367,11 +377,15 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="updateFranchiseDataButton">
-              <property name="text">
-               <string>Изменить данные франшизы</string>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="franchiseEditButtonsLayout">
+              <item>
+               <widget class="QPushButton" name="updateFranchiseDataButton">
+                <property name="text">
+                 <string>Изменить данные франшизы</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
@@ -388,7 +402,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1021</width>
+     <width>932</width>
      <height>20</height>
     </rect>
    </property>

@@ -79,3 +79,21 @@ void MainWindow::on_franchiseSearchLine_returnPressed()
 
 }
 
+void MainWindow::on_titlesTable_cellClicked(int row, int column)
+{
+    int id = ui->titlesTable->item(row, 0)->data(Qt::UserRole).toInt();
+
+    UmamiDB_interface db;
+
+    TitleItem displayed = db.getTitleById(id);
+
+    ui->titleNameLabel->setText(displayed.name);
+    ui->titleStudioLine->setText(displayed.studio);
+    ui->titleReleaseDateline->setText(displayed.releaseDate.toString());
+    ui->titleEndingDateLine->setText(displayed.endingDate.toString());
+    ui->titleStatusLine->setText(displayed.status);
+    ui->titleTypeLine->setText(displayed.type);
+    ui->titleFranchiseLine->setText(displayed.franchise);
+    ui->titleDescText->setText(displayed.description);
+
+}
