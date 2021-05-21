@@ -37,7 +37,7 @@ public:
 
     QVector<TitleBrowserElement> getTitleBrowser();
     QVector<TitleBrowserElement> getTitleBrowserByName(QString name);
-    QVector<TitleBrowserElement> getTitleBrowserByFranchise(QString name);
+    QVector<TitleBrowserElement> getTitleBrowserByFranchise(QString franchise);
 
     QVector<FranchiseBrowserElement> getFranchiseBrowser();
     QVector<FranchiseBrowserElement> getFranchiseBrowserByName(QString name);

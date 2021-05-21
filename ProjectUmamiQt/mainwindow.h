@@ -17,10 +17,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_titleSearchLine_returnPressed();
+
+    void on_franchiseSearchLine_returnPressed();
+
 private:
     Ui::MainWindow *ui;
 
-    void updateTitleBrowser();
-    void updateFranchiseBrowser();
+    void updateTitleBrowser(QVector<TitleBrowserElement> &elements);
+    void updateFranchiseBrowser(QVector<FranchiseBrowserElement> &elements);
 };
 #endif // MAINWINDOW_H

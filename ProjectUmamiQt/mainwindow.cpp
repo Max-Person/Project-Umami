@@ -7,8 +7,13 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    updateTitleBrowser();
-    updateFranchiseBrowser();
+    UmamiDB_interface db;
+
+    QVector<TitleBrowserElement> titleBrowser = db.getTitleBrowser();
+    QVector<FranchiseBrowserElement> franchiseBrowser = db.getFranchiseBrowser();
+
+    updateTitleBrowser(titleBrowser);
+    updateFranchiseBrowser(franchiseBrowser);
 }
 
 MainWindow::~MainWindow()
@@ -16,38 +21,61 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::updateTitleBrowser()
+void MainWindow::updateTitleBrowser(QVector<TitleBrowserElement> &elements)
 {
-    UmamiDB_interface db;
-
-    QVector<TitleBrowserElement> browser = db.getTitleBrowser();
-
-    for(int i=0; i<browser.size(); ++i)
+    ui->titlesTable->clearContents();
+    ui->titlesTable->setRowCount(0);
+    for(int i=0; i<elements.size(); ++i)
     {
         ui->titlesTable->insertRow(i);
-        ui->titlesTable->setItem(i, 0,  new QTableWidgetItem(browser.at(i).name));
-        ui->titlesTable->setItem(i, 1,  new QTableWidgetItem(browser.at(i).genres));
-        ui->titlesTable->setItem(i, 2,  new QTableWidgetItem(browser.at(i).type));
-        ui->titlesTable->setItem(i, 3,  new QTableWidgetItem(browser.at(i).status));
-        ui->titlesTable->item(i,0)->setData(Qt::UserRole, browser.at(i).id);
+        ui->titlesTable->setItem(i, 0,  new QTableWidgetItem(elements.at(i).name));
+        ui->titlesTable->setItem(i, 1,  new QTableWidgetItem(elements.at(i).genres));
+        ui->titlesTable->setItem(i, 2,  new QTableWidgetItem(elements.at(i).type));
+        ui->titlesTable->setItem(i, 3,  new QTableWidgetItem(elements.at(i).status));
+        ui->titlesTable->item(i,0)->setData(Qt::UserRole, elements.at(i).id);
     }
 
 }
 
-void MainWindow::updateFranchiseBrowser()
+void MainWindow::updateFranchiseBrowser(QVector<FranchiseBrowserElement> &elements)
 {
-    UmamiDB_interface db;
-
-    QVector<FranchiseBrowserElement> browser = db.getFranchiseBrowser();
-
-    for(int i=0; i<browser.size(); ++i)
+    ui->franchisesTable->clearContents();
+    ui->franchisesTable->setRowCount(0);
+    for(int i=0; i<elements.size(); ++i)
     {
         ui->franchisesTable->insertRow(i);
-        ui->franchisesTable->setItem(i, 0,  new QTableWidgetItem(browser.at(i).name));
-        ui->franchisesTable->setItem(i, 1,  new QTableWidgetItem(browser.at(i).titles));
-        ui->franchisesTable->item(i,0)->setData(Qt::UserRole, browser.at(i).id);
+        ui->franchisesTable->setItem(i, 0,  new QTableWidgetItem(elements.at(i).name));
+        ui->franchisesTable->setItem(i, 1,  new QTableWidgetItem(elements.at(i).titles));
+        ui->franchisesTable->item(i,0)->setData(Qt::UserRole, elements.at(i).id);
     }
 
+}
+
+void MainWindow::on_titleSearchLine_returnPressed()
+{
+    QString searchName = ui->titleSearchLine->text();
+    if(searchName.isEmpty())
+        return;
+
+    UmamiDB_interface db;
+
+    QVector<TitleBrowserElement> searchResults = db.getTitleBrowserByName(searchName);
+
+    updateTitleBrowser(searchResults);
+
+}
+
+void MainWindow::on_franchiseSearchLine_returnPressed()
+{
+    QString searchName = ui->franchiseSearchLine->text();
+    if(searchName.isEmpty())
+        return;
+
+    UmamiDB_interface db;
+
+    QVector<FranchiseBrowserElement> searchResults = db.getFranchiseBrowserByName(searchName);
+
+    updateFranchiseBrowser(searchResults);
 
 }
 
