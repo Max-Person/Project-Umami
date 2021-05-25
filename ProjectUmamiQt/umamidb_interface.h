@@ -8,6 +8,8 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
+#include <QCoreApplication>
+#include <QMessageBox>
 #include <QDebug>
 
 struct TitleItem
@@ -22,6 +24,13 @@ struct TitleItem
     QString status;
     QString franchise;
     QString studio;
+};
+
+struct FranchiseItem
+{
+    int id;
+    QString name;
+    QString description;
 };
 
 struct TitleBrowserElement
@@ -54,7 +63,7 @@ public:
 
     QVector<TitleBrowserElement> getTitleBrowser();
     QVector<TitleBrowserElement> getTitleBrowserByName(QString name);
-    QVector<TitleBrowserElement> getTitleBrowserByFranchise(QString franchise);
+    QVector<TitleBrowserElement> getTitleBrowserByFranchise(int franchiseID);
 
     TitleItem getTitleById(int id);
 
@@ -68,10 +77,18 @@ public:
     void deleteTitle(int id);
 
     void createStudio(QString name);
-    void createFranchise(QString name, QString description);
+
+
+    int lastFranchiseId();
 
     QVector<FranchiseBrowserElement> getFranchiseBrowser();
     QVector<FranchiseBrowserElement> getFranchiseBrowserByName(QString name);
+
+    FranchiseItem getFranchiseById(int id);
+
+    void updateFranchise(int id, QString name, QString description);
+    void createFranchise(int id, QString name, QString description);
+    void deleteFranchise(int id);
 };
 
 #endif // UMAMIDB_INTERFACE_H

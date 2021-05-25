@@ -84,20 +84,6 @@
             </column>
            </widget>
           </item>
-          <item>
-           <widget class="QPushButton" name="refreshTitlesTableButton">
-            <property name="text">
-             <string>Обновить таблицу</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="newTitleButton">
-            <property name="text">
-             <string>Создать тайтл</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
@@ -213,13 +199,6 @@
              <widget class="QTextEdit" name="titleDescText"/>
             </item>
             <item>
-             <widget class="QPushButton" name="deleteTitleButton">
-              <property name="text">
-               <string>Удалить тайтл</string>
-              </property>
-             </widget>
-            </item>
-            <item>
              <layout class="QHBoxLayout" name="TitleEditButtonsLayout">
               <item>
                <widget class="QPushButton" name="editTitleButton">
@@ -229,13 +208,27 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="cancelChangeButton">
+               <widget class="QPushButton" name="cancelTitleChangeButton">
                 <property name="text">
                  <string>Отмена</string>
                 </property>
                </widget>
               </item>
              </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="newTitleButton">
+              <property name="text">
+               <string>Создать тайтл</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="deleteTitleButton">
+              <property name="text">
+               <string>Удалить тайтл</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -292,20 +285,6 @@
               <string>Тайтлы</string>
              </property>
             </column>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="refreshFranchisesTableButton">
-            <property name="text">
-             <string>Обновить таблицу</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="newFranchiseButton">
-            <property name="text">
-             <string>Создать франшизу</string>
-            </property>
            </widget>
           </item>
          </layout>
@@ -369,7 +348,7 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_6">
               <item>
-               <widget class="QLabel" name="label_5">
+               <widget class="QLabel" name="franchiseTitlesLabel">
                 <property name="text">
                  <string>Тайтлы франшизы</string>
                 </property>
@@ -391,7 +370,10 @@
              </layout>
             </item>
             <item>
-             <widget class="QTableWidget" name="franchiseTitlesTabl">
+             <widget class="QTableWidget" name="franchiseTitlesTable">
+              <property name="selectionBehavior">
+               <enum>QAbstractItemView::SelectRows</enum>
+              </property>
               <column>
                <property name="text">
                 <string>Название</string>
@@ -417,13 +399,34 @@
             <item>
              <layout class="QHBoxLayout" name="franchiseEditButtonsLayout">
               <item>
-               <widget class="QPushButton" name="updateFranchiseDataButton">
+               <widget class="QPushButton" name="editFranchiseButton">
                 <property name="text">
                  <string>Изменить данные франшизы</string>
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QPushButton" name="cancelFranchiseChangeButton">
+                <property name="text">
+                 <string>Отменить</string>
+                </property>
+               </widget>
+              </item>
              </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="newFranchiseButton">
+              <property name="text">
+               <string>Создать франшизу</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="deleteFranchiseButton">
+              <property name="text">
+               <string>Удалить франшизу</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
