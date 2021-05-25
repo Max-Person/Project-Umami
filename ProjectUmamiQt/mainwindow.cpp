@@ -13,7 +13,19 @@ MainWindow::MainWindow(QWidget *parent)
     QVector<FranchiseBrowserElement> franchiseBrowser = db.getFranchiseBrowser();
 
     updateTitleBrowser(titleBrowser);
-    updateFranchiseBrowser(franchiseBrowser);
+    updateFranchiseBrowser(franchiseBrowser);    
+
+    ui->cancelChangeButton->hide();
+
+    ui->titleNameLine->setReadOnly(true);
+    ui->titleStudioLine->setReadOnly(true);
+    ui->titleReleaseDateline->setReadOnly(true);
+    ui->titleEndingDateLine->setReadOnly(true);
+    ui->titleStatusLine->setReadOnly(true);
+    ui->titleTypeLine->setReadOnly(true);
+    ui->titleFranchiseLine->setReadOnly(true);
+    ui->titleDescText->setReadOnly(true);
+
 }
 
 MainWindow::~MainWindow()
@@ -87,13 +99,124 @@ void MainWindow::on_titlesTable_cellClicked(int row, int column)
 
     TitleItem displayed = db.getTitleById(id);
 
-    ui->titleNameLabel->setText(displayed.name);
+    workingTitleId = displayed.id;
+    ui->titleNameLabel->setText("Тайтл:");
+    ui->titleNameLine->setText(displayed.name);
     ui->titleStudioLine->setText(displayed.studio);
-    ui->titleReleaseDateline->setText(displayed.releaseDate.toString());
-    ui->titleEndingDateLine->setText(displayed.endingDate.toString());
+    ui->titleReleaseDateline->setText(displayed.releaseDate.toString(Qt::ISODate));
+    ui->titleEndingDateLine->setText(displayed.endingDate.toString(Qt::ISODate));
     ui->titleStatusLine->setText(displayed.status);
     ui->titleTypeLine->setText(displayed.type);
     ui->titleFranchiseLine->setText(displayed.franchise);
     ui->titleDescText->setText(displayed.description);
 
+}
+
+void MainWindow::on_editTitleButton_clicked()
+{
+    if(editTitleButtonState == false)
+    {
+        editTitleButtonState = !editTitleButtonState;
+        titleBrowserSetEnabled(false);
+
+        ui->cancelChangeButton->show();
+
+        ui->titleNameLine->setReadOnly(false);
+        ui->titleStudioLine->setReadOnly(false);
+        ui->titleReleaseDateline->setReadOnly(false);
+        ui->titleEndingDateLine->setReadOnly(false);
+        ui->titleStatusLine->setReadOnly(false);
+        ui->titleTypeLine->setReadOnly(false);
+        ui->titleFranchiseLine->setReadOnly(false);
+        ui->titleDescText->setReadOnly(false);
+    }
+    else
+    {
+        int updatedId = workingTitleId;
+        QString updatedName = ui->titleNameLine->text();
+        QString updatedDescription = ui->titleDescText->toPlainText();
+        QDate updatedReleaseDate = QDate::fromString(ui->titleReleaseDateline->text(), Qt::ISODate);
+        QDate updatedEndingDate = QDate::fromString(ui->titleEndingDateLine->text(), Qt::ISODate);
+
+        UmamiDB_interface db;
+
+        QString status = ui->titleStatusLine->text();
+        int statusID = db.getStatusIdByName(status);
+        if(statusID == -1)
+            return;
+
+        QString type = ui->titleTypeLine->text();
+        int typeID = db.getTypeIdByName(type);
+        if(typeID == -1)
+            return;
+
+        QString Franchise = ui->titleFranchiseLine->text();
+        int franchiseID = db.getFranchiseIdByName(Franchise);
+        if(franchiseID == -1)
+            return;
+
+        QString studio = ui->titleStudioLine->text();
+        int studioID = db.getStudioIdByName(studio);
+        if(studioID == -1)
+            return;
+
+        db.updateTitle(updatedId, updatedName, updatedReleaseDate, updatedEndingDate, updatedDescription, franchiseID, studioID, statusID, typeID);
+
+        editTitleButtonState = !editTitleButtonState;
+        QVector<TitleBrowserElement> temp = db.getTitleBrowser();
+        updateTitleBrowser(temp);
+        titleBrowserSetEnabled(true);
+
+        ui->cancelChangeButton->hide();
+
+        ui->titleNameLine->setReadOnly(true);
+        ui->titleStudioLine->setReadOnly(true);
+        ui->titleReleaseDateline->setReadOnly(true);
+        ui->titleEndingDateLine->setReadOnly(true);
+        ui->titleStatusLine->setReadOnly(true);
+        ui->titleTypeLine->setReadOnly(true);
+        ui->titleFranchiseLine->setReadOnly(true);
+        ui->titleDescText->setReadOnly(true);
+
+    }
+}
+
+void MainWindow::titleBrowserSetEnabled(bool sw)
+{
+    ui->titleSearchLine->setEnabled(sw);
+    ui->titlesTable->setEnabled(sw);
+    ui->refreshTitlesTableButton->setEnabled(sw);
+    ui->newTitleButton->setEnabled(sw);
+}
+
+void MainWindow::on_cancelChangeButton_clicked()
+{
+    editTitleButtonState = false;
+
+    UmamiDB_interface db;
+
+    TitleItem displayed = db.getTitleById(workingTitleId);
+
+    ui->titleNameLabel->setText("Тайтл:");
+    ui->titleNameLine->setText(displayed.name);
+    ui->titleStudioLine->setText(displayed.studio);
+    ui->titleReleaseDateline->setText(displayed.releaseDate.toString(Qt::ISODate));
+    ui->titleEndingDateLine->setText(displayed.endingDate.toString(Qt::ISODate));
+    ui->titleStatusLine->setText(displayed.status);
+    ui->titleTypeLine->setText(displayed.type);
+    ui->titleFranchiseLine->setText(displayed.franchise);
+    ui->titleDescText->setText(displayed.description);
+
+    titleBrowserSetEnabled(true);
+
+    ui->cancelChangeButton->hide();
+
+    ui->titleNameLine->setReadOnly(true);
+    ui->titleStudioLine->setReadOnly(true);
+    ui->titleReleaseDateline->setReadOnly(true);
+    ui->titleEndingDateLine->setReadOnly(true);
+    ui->titleStatusLine->setReadOnly(true);
+    ui->titleTypeLine->setReadOnly(true);
+    ui->titleFranchiseLine->setReadOnly(true);
+    ui->titleDescText->setReadOnly(true);
 }

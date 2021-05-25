@@ -56,6 +56,16 @@ public:
 
     TitleItem getTitleById(int id);
 
+    int getStatusIdByName(QString name);
+    int getTypeIdByName(QString name);
+    int getStudioIdByName(QString name);
+    int getFranchiseIdByName(QString name);
+
+    void updateTitle(int id, QString name, QDate release, QDate ending, QString desc, int franchiseID, int studioID, int statusID, int typeID);
+
+    void createStudio(QString name);
+    void createFranchise(QString name, QString description);
+
     QVector<FranchiseBrowserElement> getFranchiseBrowser();
     QVector<FranchiseBrowserElement> getFranchiseBrowserByName(QString name);
 };

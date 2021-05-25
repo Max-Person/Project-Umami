@@ -24,9 +24,17 @@ private slots:
 
     void on_titlesTable_cellClicked(int row, int column);
 
+    void on_editTitleButton_clicked();
+
+    void on_cancelChangeButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
+    int workingTitleId;
+    bool editTitleButtonState = false;
+
+    void titleBrowserSetEnabled(bool sw);
     void updateTitleBrowser(QVector<TitleBrowserElement> &elements);
     void updateFranchiseBrowser(QVector<FranchiseBrowserElement> &elements);
 };

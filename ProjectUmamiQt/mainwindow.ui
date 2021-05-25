@@ -26,7 +26,7 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_14">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_14">
+         <layout class="QVBoxLayout" name="titleBrowserLayout">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
@@ -111,65 +111,75 @@
           </item>
           <item>
            <layout class="QFormLayout" name="formLayout">
-            <item row="0" column="0">
+            <item row="1" column="0">
              <widget class="QLabel" name="label_12">
               <property name="text">
                <string>Студия</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item row="1" column="1">
              <widget class="QLineEdit" name="titleStudioLine"/>
             </item>
-            <item row="1" column="0">
+            <item row="2" column="0">
              <widget class="QLabel" name="label_7">
               <property name="text">
                <string>Дата выхода</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item row="2" column="1">
              <widget class="QLineEdit" name="titleReleaseDateline"/>
             </item>
-            <item row="2" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="label_8">
               <property name="text">
                <string>Дата завершения</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item row="3" column="1">
              <widget class="QLineEdit" name="titleEndingDateLine"/>
             </item>
-            <item row="3" column="0">
+            <item row="4" column="0">
              <widget class="QLabel" name="label_9">
               <property name="text">
                <string>Тип</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="4" column="1">
              <widget class="QLineEdit" name="titleTypeLine"/>
             </item>
-            <item row="4" column="0">
+            <item row="5" column="0">
              <widget class="QLabel" name="label_10">
               <property name="text">
                <string>Статус</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
+            <item row="5" column="1">
              <widget class="QLineEdit" name="titleStatusLine"/>
             </item>
-            <item row="5" column="0">
+            <item row="6" column="0">
              <widget class="QLabel" name="label_11">
               <property name="text">
                <string>Франшиза</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
+            <item row="6" column="1">
              <widget class="QLineEdit" name="titleFranchiseLine"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Название</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="titleNameLine"/>
             </item>
            </layout>
           </item>
@@ -205,9 +215,16 @@
             <item>
              <layout class="QHBoxLayout" name="TitleEditButtonsLayout">
               <item>
-               <widget class="QPushButton" name="pushButton">
+               <widget class="QPushButton" name="editTitleButton">
                 <property name="text">
                  <string>Изменить данные о тайтле</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="cancelChangeButton">
+                <property name="text">
+                 <string>Отмена</string>
                 </property>
                </widget>
               </item>
@@ -296,6 +313,20 @@
                <string>Франшиза не выбрана</string>
               </property>
              </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>Название</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="franchiseNameLine"/>
+              </item>
+             </layout>
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_5">

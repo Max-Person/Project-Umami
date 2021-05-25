@@ -41,8 +41,6 @@ QVector<TitleBrowserElement> UmamiDB_interface::getTitleBrowser()
         browser.append(currentElement);
     }
 
-    qDebug() << browser.size();
-
     return browser;
 }
 
@@ -117,6 +115,88 @@ TitleItem UmamiDB_interface::getTitleById(int id)
 
     return returned;
 }
+
+int UmamiDB_interface::getStatusIdByName(QString name)
+{
+    QSqlQuery query(umamiDB);
+    query.exec("select release_statuses.idReleaseStatuses from release_statuses where release_statuses.Name = \"" + name + "\" limit 1;");
+
+    if(!query.next())
+        return -1;
+    else
+        return query.value("idReleaseStatuses").toInt();
+}
+
+int UmamiDB_interface::getTypeIdByName(QString name)
+{
+    QSqlQuery query(umamiDB);
+    query.exec("select title_types.idTitleTypes from title_types where title_types.Name = \"" + name + "\" limit 1;");
+
+    if(!query.next())
+        return -1;
+    else
+        return query.value("idTitleTypes").toInt();
+}
+
+int UmamiDB_interface::getStudioIdByName(QString name)
+{
+    QSqlQuery query(umamiDB);
+    query.exec("select studios.idStudios from studios where studios.Name = \"" + name + "\" limit 1;");
+
+    if(!query.next())
+        return -1;
+    else
+        return query.value("idStudios").toInt();
+}
+
+int UmamiDB_interface::getFranchiseIdByName(QString name)
+{
+    QSqlQuery query(umamiDB);
+    query.exec("select franchises.idfranchises from franchises where franchises.Name = \"" + name + "\" limit 1;");
+
+    if(!query.next())
+        return -1;
+    else
+        return query.value("idfranchises").toInt();
+}
+
+void UmamiDB_interface::updateTitle(int id, QString name, QDate release, QDate ending, QString desc, int franchiseID, int studioID, int statusID, int typeID)
+{
+    QSqlQuery query(umamiDB);
+    query.exec(
+    "update titles \
+    set Name = \"" + name + "\", \
+        DateOfRelease = \"" + release.toString(Qt::ISODate) + "\", \
+        EndingDate = \"" + ending.toString(Qt::ISODate) + "\", \
+        Description = \"" + desc + "\", \
+        FranchiseID = " + QString::number(franchiseID) + ", \
+        StudioID = " + QString::number(studioID) + ", \
+        StatusID = " + QString::number(statusID) + ", \
+        TypeID = " + QString::number(typeID) + " \
+    where idTitles = " + QString::number(id) + ";");
+
+    qDebug() << query.lastQuery() << "\n" << query.lastError();
+}
+
+void UmamiDB_interface::createStudio(QString name)
+{
+    QSqlQuery query(umamiDB);
+    query.prepare("insert into studios(Name) values (:name);");
+    query.bindValue(":name", name);
+
+    query.exec();
+}
+
+void UmamiDB_interface::createFranchise(QString name, QString description)
+{
+    QSqlQuery query(umamiDB);
+    query.prepare("insert into franchises(Name, Description) values (:name, :desc);");
+    query.bindValue(":name", name);
+    query.bindValue(":desc", description);
+
+    query.exec();
+}
+
 
 QVector<FranchiseBrowserElement> UmamiDB_interface::getFranchiseBrowser()
 {
