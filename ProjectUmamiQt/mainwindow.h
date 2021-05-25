@@ -3,11 +3,18 @@
 
 #include <QMainWindow>
 #include <QTableWidget>
+#include <QMessageBox>
 #include "umamidb_interface.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
+
+enum ConfirmButtonState {
+    noAction,
+    edit,
+    creation
+};
 
 class MainWindow : public QMainWindow
 {
@@ -28,13 +35,18 @@ private slots:
 
     void on_cancelChangeButton_clicked();
 
+    void on_newTitleButton_clicked();
+
+    void on_deleteTitleButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     int workingTitleId;
-    bool editTitleButtonState = false;
+    ConfirmButtonState editTitleButtonState = noAction;
 
     void titleBrowserSetEnabled(bool sw);
+    void displayTitle(TitleItem displayed);
     void updateTitleBrowser(QVector<TitleBrowserElement> &elements);
     void updateFranchiseBrowser(QVector<FranchiseBrowserElement> &elements);
 };

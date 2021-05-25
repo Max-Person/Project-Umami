@@ -66,12 +66,15 @@ void MainWindow::updateFranchiseBrowser(QVector<FranchiseBrowserElement> &elemen
 void MainWindow::on_titleSearchLine_returnPressed()
 {
     QString searchName = ui->titleSearchLine->text();
-    if(searchName.isEmpty())
-        return;
 
     UmamiDB_interface db;
 
-    QVector<TitleBrowserElement> searchResults = db.getTitleBrowserByName(searchName);
+    QVector<TitleBrowserElement> searchResults;
+
+    if(!searchName.isEmpty())
+        searchResults = db.getTitleBrowserByName(searchName);
+    else
+        searchResults = db.getTitleBrowser();
 
     updateTitleBrowser(searchResults);
 
@@ -80,12 +83,15 @@ void MainWindow::on_titleSearchLine_returnPressed()
 void MainWindow::on_franchiseSearchLine_returnPressed()
 {
     QString searchName = ui->franchiseSearchLine->text();
-    if(searchName.isEmpty())
-        return;
 
     UmamiDB_interface db;
 
-    QVector<FranchiseBrowserElement> searchResults = db.getFranchiseBrowserByName(searchName);
+    QVector<FranchiseBrowserElement> searchResults;
+
+    if(!searchName.isEmpty())
+        searchResults = db.getFranchiseBrowserByName(searchName);
+    else
+        searchResults = db.getFranchiseBrowser();
 
     updateFranchiseBrowser(searchResults);
 
@@ -114,10 +120,11 @@ void MainWindow::on_titlesTable_cellClicked(int row, int column)
 
 void MainWindow::on_editTitleButton_clicked()
 {
-    if(editTitleButtonState == false)
+    if(editTitleButtonState == noAction)
     {
-        editTitleButtonState = !editTitleButtonState;
+        editTitleButtonState = edit;
         titleBrowserSetEnabled(false);
+        ui->deleteTitleButton->setEnabled(false);
 
         ui->cancelChangeButton->show();
 
@@ -143,31 +150,51 @@ void MainWindow::on_editTitleButton_clicked()
         QString status = ui->titleStatusLine->text();
         int statusID = db.getStatusIdByName(status);
         if(statusID == -1)
+        {
+            QMessageBox::critical(0, "Ошибка", "Указан несуществующий статус");
             return;
+        }
 
         QString type = ui->titleTypeLine->text();
         int typeID = db.getTypeIdByName(type);
         if(typeID == -1)
+        {
+            QMessageBox::critical(0, "Ошибка", "Указан несуществующий тип");
             return;
+        }
 
         QString Franchise = ui->titleFranchiseLine->text();
         int franchiseID = db.getFranchiseIdByName(Franchise);
         if(franchiseID == -1)
+        {
+            QMessageBox::critical(0, "Ошибка", "Указан несуществующая франшиза");
             return;
+        }
 
         QString studio = ui->titleStudioLine->text();
         int studioID = db.getStudioIdByName(studio);
         if(studioID == -1)
+        {
+            QMessageBox::critical(0, "Ошибка", "Указан несуществующая студия");
             return;
+        }
 
-        db.updateTitle(updatedId, updatedName, updatedReleaseDate, updatedEndingDate, updatedDescription, franchiseID, studioID, statusID, typeID);
+        if(editTitleButtonState == edit)
+            db.updateTitle(updatedId, updatedName, updatedReleaseDate, updatedEndingDate, updatedDescription, franchiseID, studioID, statusID, typeID);
+        else
+            db.createTitle(db.lastTitleId()+1, updatedName, updatedReleaseDate, updatedEndingDate, updatedDescription, franchiseID, studioID, statusID, typeID);
 
-        editTitleButtonState = !editTitleButtonState;
+
+        editTitleButtonState = noAction;
         QVector<TitleBrowserElement> temp = db.getTitleBrowser();
         updateTitleBrowser(temp);
         titleBrowserSetEnabled(true);
 
+        TitleItem displayed = db.getTitleById(workingTitleId);
+        displayTitle(displayed);
+
         ui->cancelChangeButton->hide();
+        ui->deleteTitleButton->setEnabled(true);
 
         ui->titleNameLine->setReadOnly(true);
         ui->titleStudioLine->setReadOnly(true);
@@ -189,14 +216,8 @@ void MainWindow::titleBrowserSetEnabled(bool sw)
     ui->newTitleButton->setEnabled(sw);
 }
 
-void MainWindow::on_cancelChangeButton_clicked()
+void MainWindow::displayTitle(TitleItem displayed)
 {
-    editTitleButtonState = false;
-
-    UmamiDB_interface db;
-
-    TitleItem displayed = db.getTitleById(workingTitleId);
-
     ui->titleNameLabel->setText("Тайтл:");
     ui->titleNameLine->setText(displayed.name);
     ui->titleStudioLine->setText(displayed.studio);
@@ -206,6 +227,17 @@ void MainWindow::on_cancelChangeButton_clicked()
     ui->titleTypeLine->setText(displayed.type);
     ui->titleFranchiseLine->setText(displayed.franchise);
     ui->titleDescText->setText(displayed.description);
+}
+
+void MainWindow::on_cancelChangeButton_clicked()
+{
+    editTitleButtonState = noAction;
+
+    UmamiDB_interface db;
+
+    TitleItem displayed = db.getTitleById(workingTitleId);
+
+    displayTitle(displayed);
 
     titleBrowserSetEnabled(true);
 
@@ -219,4 +251,43 @@ void MainWindow::on_cancelChangeButton_clicked()
     ui->titleTypeLine->setReadOnly(true);
     ui->titleFranchiseLine->setReadOnly(true);
     ui->titleDescText->setReadOnly(true);
+}
+
+void MainWindow::on_newTitleButton_clicked()
+{
+    if(editTitleButtonState == noAction)
+    {
+        editTitleButtonState = creation;
+        titleBrowserSetEnabled(false);
+        ui->deleteTitleButton->setEnabled(false);
+
+        TitleItem displayed;
+
+        displayTitle(displayed);
+
+        ui->cancelChangeButton->show();
+
+        ui->titleNameLine->setReadOnly(false);
+        ui->titleStudioLine->setReadOnly(false);
+        ui->titleReleaseDateline->setReadOnly(false);
+        ui->titleEndingDateLine->setReadOnly(false);
+        ui->titleStatusLine->setReadOnly(false);
+        ui->titleTypeLine->setReadOnly(false);
+        ui->titleFranchiseLine->setReadOnly(false);
+        ui->titleDescText->setReadOnly(false);
+    }
+}
+
+void MainWindow::on_deleteTitleButton_clicked()
+{
+    UmamiDB_interface db;
+
+    db.deleteTitle(workingTitleId);
+
+    TitleItem displayed;
+    displayTitle(displayed);
+    ui->titleNameLabel->setText("Тайтл не выбран");
+
+    QVector<TitleBrowserElement> temp = db.getTitleBrowser();
+    updateTitleBrowser(temp);
 }

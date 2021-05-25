@@ -13,6 +13,18 @@ UmamiDB_interface::~UmamiDB_interface()
     QSqlDatabase::removeDatabase("umamiConnection");
 }
 
+int UmamiDB_interface::lastTitleId()
+{
+    QSqlQuery query(umamiDB);
+    query.exec("select titles.idTitles from titles order by idTitles desc limit 1;");
+
+    if(!query.next())
+        return -1;
+    else
+        return query.value("idTitles").toInt();
+
+}
+
 QVector<TitleBrowserElement> UmamiDB_interface::getTitleBrowser()
 {
     QSqlQuery query(umamiDB);
@@ -176,6 +188,31 @@ void UmamiDB_interface::updateTitle(int id, QString name, QDate release, QDate e
     where idTitles = " + QString::number(id) + ";");
 
     qDebug() << query.lastQuery() << "\n" << query.lastError();
+}
+
+void UmamiDB_interface::createTitle(int id, QString name, QDate release, QDate ending, QString desc, int franchiseID, int studioID, int statusID, int typeID)
+{
+    QSqlQuery query(umamiDB);
+    query.exec(
+    "insert into titles(idTitles, Name, DateOfRelease, EndingDate, Description, FranchiseID, StudioID, StatusID, TypeID) \
+    values (" + QString::number(id) + ", \
+        \"" + name + "\", \
+        \"" + release.toString(Qt::ISODate) + "\", \
+        \"" + ending.toString(Qt::ISODate) + "\", \
+        \"" + desc + "\", \
+        " + QString::number(franchiseID) + ", \
+        " + QString::number(studioID) + ", \
+        " + QString::number(statusID) + ", \
+        " + QString::number(typeID) + ");");
+
+    qDebug() << query.lastQuery() << "\n" << query.lastError();
+
+}
+
+void UmamiDB_interface::deleteTitle(int id)
+{
+    QSqlQuery query(umamiDB);
+    query.exec("delete from titles where titles.idTitles = " + QString::number(id) + ";");
 }
 
 void UmamiDB_interface::createStudio(QString name)

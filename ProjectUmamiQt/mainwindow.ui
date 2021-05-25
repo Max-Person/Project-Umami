@@ -213,6 +213,13 @@
              <widget class="QTextEdit" name="titleDescText"/>
             </item>
             <item>
+             <widget class="QPushButton" name="deleteTitleButton">
+              <property name="text">
+               <string>Удалить тайтл</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <layout class="QHBoxLayout" name="TitleEditButtonsLayout">
               <item>
                <widget class="QPushButton" name="editTitleButton">

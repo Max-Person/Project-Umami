@@ -50,6 +50,8 @@ public:
     UmamiDB_interface();
     ~UmamiDB_interface();
 
+    int lastTitleId();
+
     QVector<TitleBrowserElement> getTitleBrowser();
     QVector<TitleBrowserElement> getTitleBrowserByName(QString name);
     QVector<TitleBrowserElement> getTitleBrowserByFranchise(QString franchise);
@@ -62,6 +64,8 @@ public:
     int getFranchiseIdByName(QString name);
 
     void updateTitle(int id, QString name, QDate release, QDate ending, QString desc, int franchiseID, int studioID, int statusID, int typeID);
+    void createTitle(int id, QString name, QDate release, QDate ending, QString desc, int franchiseID, int studioID, int statusID, int typeID);
+    void deleteTitle(int id);
 
     void createStudio(QString name);
     void createFranchise(QString name, QString description);
